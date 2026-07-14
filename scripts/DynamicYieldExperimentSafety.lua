@@ -87,3 +87,4 @@ function ADDynamicYield:loadMap(name)
 end
 
 source(Utils.getFilename("scripts/DynamicYieldExperimentApproach.lua", g_currentModDirectory))
+source(Utils.getFilename("scripts/DynamicYieldExperimentTrainSafety.lua", g_currentModDirectory))
