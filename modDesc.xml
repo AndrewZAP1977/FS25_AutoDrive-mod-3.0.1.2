@@ -41,11 +41,12 @@ Changelog: Необходимые корректировки для FS25, нас
 ]]>
 		</zh>
 	</description>
-	<version>3.0.1.2</version>
+	<version>3.0.1.2.50</version>
 	<multiplayer supported="true" />
 	<iconFilename>icon_AutoDrive.dds</iconFilename>
 	<extraSourceFiles>
 		<sourceFile filename="register.lua" />
+		<sourceFile filename="scripts/DynamicYieldExperiment.lua" />
 	</extraSourceFiles>
 
 	<l10n filenamePrefix="translations/translation" />
