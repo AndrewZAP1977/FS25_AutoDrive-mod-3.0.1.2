@@ -47,6 +47,7 @@ Changelog: Необходимые корректировки для FS25, нас
 	<extraSourceFiles>
 		<sourceFile filename="register.lua" />
 		<sourceFile filename="scripts/DynamicYieldExperiment.lua" />
+		<sourceFile filename="scripts/DynamicYieldExperimentSafety.lua" />
 	</extraSourceFiles>
 
 	<l10n filenamePrefix="translations/translation" />
