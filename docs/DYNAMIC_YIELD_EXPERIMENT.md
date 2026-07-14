@@ -12,7 +12,8 @@ When two active AutoDrive vehicles:
 
 - are 55–175 m apart;
 - are travelling in opposite directions;
-- have at least 75 m of the same future blue two-way route in reverse order;
+- are already on the same future blue two-way route in reverse order;
+- have at least 120 m of that common route ahead;
 - are not already involved in another dynamic meeting;
 
 both right-side manoeuvres are evaluated.
@@ -39,7 +40,7 @@ This is an experimental build. It is disabled by default.
 
 The first test must be performed on:
 
-- a straight or gently curved blue two-way route;
+- a straight or gently curved blue two-way route at least 180–250 m long;
 - level open ground;
 - no ditch, water, fence, tree, pole or building on either right side;
 - two short vehicles without trailers;
@@ -83,7 +84,7 @@ Disable verbose diagnostics:
 
 ## First test
 
-1. Place two small vehicles about 220–250 m apart on opposite ends of a long blue two-way route.
+1. Place two small vehicles about 220–250 m apart on opposite ends of one long blue two-way route.
 2. Give them destinations beyond each other.
 3. Start both vehicles.
 4. Enable the experiment before they come within 175 m:
@@ -119,7 +120,7 @@ Common rejection reasons:
 - `cross grade` — terrain to the right is too steep;
 - `longitudinal grade` — the temporary path has a steep step or slope;
 - `obstacle in right corridor` — collision scan found an object;
-- no pair message — routes do not contain a sufficiently long common opposite blue section, or vehicle headings are not yet opposite enough.
+- no pair message — vehicles are not yet on the same sufficiently long opposite blue section, or their headings are not opposite enough.
 
 ## Current limitations
 
