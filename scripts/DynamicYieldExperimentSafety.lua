@@ -85,3 +85,5 @@ function ADDynamicYield:loadMap(name)
         self.MAX_ENTRY_APPROACH_DISTANCE
     )
 end
+
+source(Utils.getFilename("scripts/DynamicYieldExperimentApproach.lua", g_currentModDirectory))
