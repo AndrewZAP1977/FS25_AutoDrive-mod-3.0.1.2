@@ -1,49 +1,87 @@
--- Additional conservative limits for the first dynamic-yield experiment.
+-- Conservative limits and approach detection for the dynamic-yield experiment.
 
 if ADDynamicYield == nil then
     Logging.error("[AD-DY] Dynamic-yield safety patch could not load")
     return
 end
 
--- This branch exists only for active testing, so make the experiment impossible
--- to forget. It can still be disabled at runtime with: adDynamicYield off
-ADDynamicYield.BUILD = "dynamic-yield-exp0.2"
+ADDynamicYield.BUILD = "dynamic-yield-exp0.3"
 ADDynamicYield.enabled = true
-
--- The temporary S path for ordinary vehicles is roughly 65-100 m long. Require
--- a clearly longer common two-way road so the whole manoeuvre stays on it.
 ADDynamicYield.MIN_SHARED_LENGTH = 120
-ADDynamicYield.MAX_OVERLAP_START_NODES = 2
+ADDynamicYield.MAX_ENTRY_APPROACH_DISTANCE = 70
 
-local dySafetyOriginalFindOpposingOverlap = ADDynamicYield.findOpposingOverlap
+local function dysDistanceToIndex(manager, vehicle, wayPoints, currentIndex, targetIndex)
+    if wayPoints == nil or currentIndex == nil or targetIndex == nil or targetIndex < currentIndex then
+        return math.huge
+    end
+    local x, _, z = manager:getPosition(vehicle)
+    local distance = 0
+    local previousX = x
+    local previousZ = z
+    for index = currentIndex, targetIndex do
+        local point = wayPoints[index]
+        if point == nil then
+            return math.huge
+        end
+        distance = distance + MathUtil.vector2Length(point.x - previousX, point.z - previousZ)
+        previousX = point.x
+        previousZ = point.z
+    end
+    return distance
+end
+
+local dysOriginalFindOpposingOverlap = ADDynamicYield.findOpposingOverlap
 function ADDynamicYield:findOpposingOverlap(firstVehicle, secondVehicle)
-    local overlap = dySafetyOriginalFindOpposingOverlap(self, firstVehicle, secondVehicle)
+    local overlap = dysOriginalFindOpposingOverlap(self, firstVehicle, secondVehicle)
     if overlap == nil then
         return nil
     end
 
-    if overlap.firstStart > overlap.firstCurrent + self.MAX_OVERLAP_START_NODES
-        or overlap.secondStart > overlap.secondCurrent + self.MAX_OVERLAP_START_NODES then
-        self:debug(
-            "Opposing overlap rejected because shared road starts later: %s +%d nodes, %s +%d nodes",
-            tostring(firstVehicle ~= nil and firstVehicle.id or -1),
-            overlap.firstStart - overlap.firstCurrent,
-            tostring(secondVehicle ~= nil and secondVehicle.id or -1),
-            overlap.secondStart - overlap.secondCurrent
-        )
+    local firstDistance = dysDistanceToIndex(
+        self,
+        firstVehicle,
+        overlap.firstRoute,
+        overlap.firstCurrent,
+        overlap.firstStart
+    )
+    local secondDistance = dysDistanceToIndex(
+        self,
+        secondVehicle,
+        overlap.secondRoute,
+        overlap.secondCurrent,
+        overlap.secondStart
+    )
+
+    if firstDistance > self.MAX_ENTRY_APPROACH_DISTANCE
+        or secondDistance > self.MAX_ENTRY_APPROACH_DISTANCE then
+        local now = g_time or 0
+        if self.lastEntryRejectLog == nil or now - self.lastEntryRejectLog > 3000 then
+            self.lastEntryRejectLog = now
+            self:debug(
+                "Shared road entry still too far: %s %.1fm, %s %.1fm; limit=%dm",
+                tostring(firstVehicle ~= nil and firstVehicle.id or -1),
+                firstDistance,
+                tostring(secondVehicle ~= nil and secondVehicle.id or -1),
+                secondDistance,
+                self.MAX_ENTRY_APPROACH_DISTANCE
+            )
+        end
         return nil
     end
 
+    overlap.firstApproachDistance = firstDistance
+    overlap.secondApproachDistance = secondDistance
     return overlap
 end
 
-local dySafetyOriginalLoadMap = ADDynamicYield.loadMap
+local dysOriginalLoadMap = ADDynamicYield.loadMap
 function ADDynamicYield:loadMap(name)
-    dySafetyOriginalLoadMap(self, name)
+    dysOriginalLoadMap(self, name)
     self.enabled = true
     self:log(
-        "%s active automatically; current shared blue road only, minimum shared length=%dm. Disable with: adDynamicYield off",
+        "%s active automatically; shared blue road=%dm minimum, entry approach=%dm maximum. Disable with: adDynamicYield off",
         self.BUILD,
-        self.MIN_SHARED_LENGTH
+        self.MIN_SHARED_LENGTH,
+        self.MAX_ENTRY_APPROACH_DISTANCE
     )
 end
