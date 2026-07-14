@@ -88,3 +88,4 @@ end
 
 source(Utils.getFilename("scripts/DynamicYieldExperimentApproach.lua", g_currentModDirectory))
 source(Utils.getFilename("scripts/DynamicYieldExperimentTrainSafety.lua", g_currentModDirectory))
+source(Utils.getFilename("scripts/DynamicYieldExperimentRightSide.lua", g_currentModDirectory))
