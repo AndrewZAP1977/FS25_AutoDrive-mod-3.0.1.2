@@ -5,6 +5,11 @@ if ADDynamicYield == nil then
     return
 end
 
+-- This branch exists only for active testing, so make the experiment impossible
+-- to forget. It can still be disabled at runtime with: adDynamicYield off
+ADDynamicYield.BUILD = "dynamic-yield-exp0.2"
+ADDynamicYield.enabled = true
+
 -- The temporary S path for ordinary vehicles is roughly 65-100 m long. Require
 -- a clearly longer common two-way road so the whole manoeuvre stays on it.
 ADDynamicYield.MIN_SHARED_LENGTH = 120
@@ -35,8 +40,10 @@ end
 local dySafetyOriginalLoadMap = ADDynamicYield.loadMap
 function ADDynamicYield:loadMap(name)
     dySafetyOriginalLoadMap(self, name)
+    self.enabled = true
     self:log(
-        "Safety limits: current shared blue road only, minimum shared length=%dm",
+        "%s active automatically; current shared blue road only, minimum shared length=%dm. Disable with: adDynamicYield off",
+        self.BUILD,
         self.MIN_SHARED_LENGTH
     )
 end
