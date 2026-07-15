@@ -41,7 +41,7 @@ Changelog: Необходимые корректировки для FS25, нас
 ]]>
 		</zh>
 	</description>
-	<version>3.0.1.2.52</version>
+	<version>3.0.1.2.53</version>
 	<multiplayer supported="true" />
 	<iconFilename>icon_AutoDrive.dds</iconFilename>
 	<extraSourceFiles>
@@ -154,7 +154,7 @@ Changelog: Необходимые корректировки для FS25, нас
 			<binding device="0_XINPUT_GAMEPAD" input="BUTTON_5 BUTTON_6 BUTTON_12" axisComponent="+" neutralInput="0" index="1" />
 		</actionBinding>
 		<actionBinding action="ADSelectNextFillType">
-			<binding device="KB_MOUSE_DEFAULT" input="KEY_lctrl KEY_lalt KEY_o" axisComponent="+" neutralInput="0" index="1" />
+			<binding device="KB_MOUSE_DEFAULT" input="KEY_lctrl KEY_lalt_o" axisComponent="+" neutralInput="0" index="1" />
 			<binding device="0_XINPUT_GAMEPAD" input="BUTTON_5 BUTTON_6 AXIS_2-" axisComponent="+" neutralInput="0" index="1" />
 		</actionBinding>
 		<actionBinding action="ADSelectPreviousFillType">
@@ -171,7 +171,7 @@ Changelog: Необходимые корректировки для FS25, нас
 			<binding device="0_XINPUT_GAMEPAD" input="BUTTON_5 BUTTON_6 AXIS_4+" axisComponent="+" neutralInput="0" index="1" />
 		</actionBinding>
 		<actionBinding action="AD_open_notification_history">
-			<binding device="KB_MOUSE_DEFAULT" input="KEY_lctrl KEY_lalt KEY_m" axisComponent="+" neutralInput="0" index="1" />
+			<binding device="KB_MOUSE_DEFAULT" input="KEY_lctrl KEY_lalt_m" axisComponent="+" neutralInput="0" index="1" />
 		</actionBinding>
 	</inputBinding>
 </modDesc>
