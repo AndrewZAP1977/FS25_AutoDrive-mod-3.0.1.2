@@ -1,6 +1,6 @@
 # FS25_AutoDrive
 
-This fork extends AutoDrive with dynamic, collision-aware passing on single-lane routes: opposing vehicles can move to their own right side, coordinate their speed, safely clear long articulated trains, and return naturally to the route, with single-vehicle yielding and serial passage retained as fallbacks when a dual pass is unsafe or the road is too short. Special thanks to Stephan-S and the AutoDrive team for creating and maintaining the original mod.
+This fork extends AutoDrive with dynamic, collision-aware coordination of oncoming vehicles on two-way routes: both vehicles can move to their own right side, coordinate their speed, safely clear long articulated combinations, and return naturally to the route; when the two-vehicle manoeuvre is unsafe or the road is too short, the system falls back to one-vehicle yielding or sequential movement. Special thanks to Stephan-S and the AutoDrive team for creating and maintaining the original mod.
 
 FS25 version of the AutoDrive mod
 
