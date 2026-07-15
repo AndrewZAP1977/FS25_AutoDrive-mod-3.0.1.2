@@ -116,10 +116,16 @@ local function dytmUpdateObservedYieldSpeed(manager, pair, remainingDistance)
     local sync = pair.sync
     local now = g_time or 0
 
-    if sync.lastYieldDistance ~= nil and sync.lastYieldTime ~= nil then
-        local elapsed = (now - sync.lastYieldTime) / 1000
+    if sync.lastYieldDistance == nil or sync.lastYieldTime == nil then
+        sync.lastYieldDistance = remainingDistance
+        sync.lastYieldTime = now
+        return sync.observedYieldSpeed
+    end
+
+    local elapsed = (now - sync.lastYieldTime) / 1000
+    if elapsed >= 0.25 then
         local progress = sync.lastYieldDistance - remainingDistance
-        if elapsed >= 0.25 and progress >= 0 then
+        if progress >= 0 then
             local measured = progress / elapsed
             if measured >= 0.5 and measured <= 25 then
                 if sync.observedYieldSpeed == nil then
@@ -129,10 +135,10 @@ local function dytmUpdateObservedYieldSpeed(manager, pair, remainingDistance)
                 end
             end
         end
+        sync.lastYieldDistance = remainingDistance
+        sync.lastYieldTime = now
     end
 
-    sync.lastYieldDistance = remainingDistance
-    sync.lastYieldTime = now
     return sync.observedYieldSpeed
 end
 
