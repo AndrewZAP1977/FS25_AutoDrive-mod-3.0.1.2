@@ -182,11 +182,11 @@ function ADUnloadTriggerDiagnostics:inspectVehicle(vehicle, takeSnapshot)
                 end
 
                 local dischargeState = -1
+                local unloading = false
                 if trailer.getDischargeState ~= nil then
                     dischargeState = trailer:getDischargeState()
+                    unloading = dischargeState ~= Dischargeable.DISCHARGE_STATE_OFF
                 end
-
-                local unloading = dischargeState ~= Dischargeable.DISCHARGE_STATE_OFF
                 if vehicle.ad.trailerModule ~= nil and vehicle.ad.trailerModule.isUnloadingWithTrailer == trailer then
                     unloading = unloading or vehicle.ad.trailerModule.isUnloading == true
                 end
@@ -224,7 +224,7 @@ function ADUnloadTriggerDiagnostics:inspectVehicle(vehicle, takeSnapshot)
                     Logging.info("[AD-UT] SNAP vehicle=\"%s\" trailer=\"%s\" active=%s mode=%s rootDist=%.2fm trailerDist=%.2fm nodeDist=%.2fm maxTrigger=%.2fm updateGate=%s rangeGate=%s trailerGate=%s canDischarge=%s trigger=%s dischargeObject=%s dischargeState=%s targetReached=%s speed=%.2fkm/h",
                         adutGetName(vehicle), adutGetName(trailer), adutBool(isActive), tostring(vehicle.ad.stateModule:getMode()), rootDistance, trailerDistance, nodeDistance,
                         maxTriggerDistance, adutBool(updateGate), adutBool(rangeGate), adutBool(trailerGate), adutBool(canDischarge), adutBool(dischargeNode.trigger ~= nil),
-                        adutBool(dischargeNode.dischargeObject ~= nil), tostring(dischargeState), adutBool(targetReached), vehicle.lastSpeedReal * 3600)
+                        adutBool(dischargeNode.dischargeObject ~= nil), tostring(dischargeState), adutBool(targetReached), (vehicle.lastSpeedReal or 0) * 3600)
                 end
             end
         end
