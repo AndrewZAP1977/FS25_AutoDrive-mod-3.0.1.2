@@ -92,3 +92,4 @@ source(Utils.getFilename("scripts/DynamicYieldExperimentRightSide.lua", g_curren
 source(Utils.getFilename("scripts/DynamicYieldExperimentRouteDetection.lua", g_currentModDirectory))
 source(Utils.getFilename("scripts/DynamicYieldExperimentHybrid.lua", g_currentModDirectory))
 source(Utils.getFilename("scripts/DynamicYieldExperimentTiming.lua", g_currentModDirectory))
+source(Utils.getFilename("scripts/DynamicYieldExperimentTrigger.lua", g_currentModDirectory))
