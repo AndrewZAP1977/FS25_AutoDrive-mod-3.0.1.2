@@ -93,3 +93,8 @@ source(Utils.getFilename("scripts/DynamicYieldExperimentRouteDetection.lua", g_c
 source(Utils.getFilename("scripts/DynamicYieldExperimentHybrid.lua", g_currentModDirectory))
 source(Utils.getFilename("scripts/DynamicYieldExperimentTiming.lua", g_currentModDirectory))
 source(Utils.getFilename("scripts/DynamicYieldExperimentTrigger.lua", g_currentModDirectory))
+
+-- Do not use straight-line proximity as the normal trigger. Roads may loop or run
+-- close on opposite sides of buildings or slopes. Execution is based on remaining
+-- distance along the shared route; the latest-safe-start guard remains active.
+ADDynamicYield.MANEUVER_TRIGGER_WORLD_DISTANCE = 0
