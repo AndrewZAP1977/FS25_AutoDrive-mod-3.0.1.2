@@ -104,3 +104,4 @@ source(Utils.getFilename("scripts/DynamicYieldDualPass.lua", g_currentModDirecto
 source(Utils.getFilename("scripts/DynamicYieldDualPassTiming.lua", g_currentModDirectory))
 source(Utils.getFilename("scripts/DynamicYieldDualPassRefinement.lua", g_currentModDirectory))
 source(Utils.getFilename("scripts/DynamicYieldDualPassTuning.lua", g_currentModDirectory))
+source(Utils.getFilename("scripts/DynamicYieldDualPassExit.lua", g_currentModDirectory))
