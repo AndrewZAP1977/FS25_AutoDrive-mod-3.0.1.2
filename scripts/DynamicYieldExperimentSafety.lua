@@ -98,3 +98,5 @@ source(Utils.getFilename("scripts/DynamicYieldExperimentTrigger.lua", g_currentM
 -- close on opposite sides of buildings or slopes. Execution is based on remaining
 -- distance along the shared route; the latest-safe-start guard remains active.
 ADDynamicYield.MANEUVER_TRIGGER_WORLD_DISTANCE = 0
+
+source(Utils.getFilename("scripts/DynamicYieldExperimentSideConvention.lua", g_currentModDirectory))
