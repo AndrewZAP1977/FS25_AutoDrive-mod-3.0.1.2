@@ -1,7 +1,7 @@
 -- Force the temporary yield path onto the actual right-hand side of the vehicle.
 -- Route tangent direction can be opposite to the vehicle's physical forward axis
 -- on some generated paths, so the perpendicular must be calibrated against the
--- steering node's local +X (right) axis.
+-- steering node's local -X axis, which is the physical right side in GIANTS.
 
 if ADDynamicYield == nil then
     Logging.error("[AD-DY] Right-side calibration patch could not load")
@@ -71,7 +71,8 @@ function ADDynamicYield:buildApproachCandidate(vehicle, otherVehicle, entryDista
         return nil, "cannot determine vehicle right axis"
     end
 
-    local vehicleRightX, _, vehicleRightZ = localDirectionToWorld(steeringNode, 1, 0, 0)
+    -- GIANTS vehicle nodes use local -X as the physical right side.
+    local vehicleRightX, _, vehicleRightZ = localDirectionToWorld(steeringNode, -1, 0, 0)
     vehicleRightX, vehicleRightZ = dyrNormalize(vehicleRightX, vehicleRightZ)
 
     local firstCenter = self:sampleRoute(
@@ -151,6 +152,7 @@ function ADDynamicYield:buildApproachCandidate(vehicle, otherVehicle, entryDista
     candidate.sideSign = sideSign
     candidate.rightAxisDot = rightDot
     candidate.sideName = "RIGHT"
+    candidate.sideAxis = "LOCAL_NEGATIVE_X"
     return candidate, nil
 end
 
@@ -162,7 +164,7 @@ function ADDynamicYield:createPair(firstVehicle, secondVehicle, overlap)
         local candidate = pair ~= nil and pair.candidate or nil
         if pair ~= nil and candidate ~= nil then
             self:log(
-                "Pair %d physical side confirmed: %s moves RIGHT; routeSign=%d axisDot=%.3f",
+                "Pair %d physical side confirmed: %s moves RIGHT; routeSign=%d axisDot=%.3f axis=-X",
                 pair.id,
                 dyrLabel(candidate.vehicle),
                 candidate.sideSign or 0,
@@ -179,7 +181,7 @@ function ADDynamicYield:loadMap(name)
     self.enabled = true
     self.debugEnabled = true
     self:log(
-        "%s right-side calibration active; pair range=%dm, entry approach=%dm",
+        "%s right-side calibration active; physical right axis=-X, pair range=%dm, entry approach=%dm",
         self.BUILD,
         self.MAX_PAIR_DISTANCE,
         self.MAX_ENTRY_APPROACH_DISTANCE
