@@ -22,7 +22,7 @@ Changelog: Adeguamenti necessari per FS25, adeguamento dei colori, conversione d
 		</it>
 		<fr>
 <![CDATA[Ce mod peut être utilisé pour créer un réseau de routes permettant aux véhicules de conduire de manière autonome. Une fois la configuration effectuée, vous pouvez indiquer à un tracteur situé près du réseau de se rendre à n'importe quel point, tel que le magasin, le champ 1 ou un point de vente.
-Changelog: adaptations nécessaires pour le FS25, adaptation des couleurs, conversion de tous les graphiques, nouvelle création des menus, corrections et optimisation de tous les scripts et routines, adaptation du HUD, infos complètes et release notes : https://github.com/Stephan-S/FS25_AutoDrive
+Changelog: adaptations nécessaires pour le FS25, adaptation des couleurs, conversion de tous les graphiques, nouvelle création des menus, corrections et optimisation de tous les scripts et routines, adaptation HUD, infos complètes et release notes : https://github.com/Stephan-S/FS25_AutoDrive
 ]]>
 		</fr>
 		<es>
@@ -41,7 +41,7 @@ Changelog: Необходимые корректировки для FS25, нас
 ]]>
 		</zh>
 	</description>
-	<version>3.0.1.2.54</version>
+	<version>3.0.1.2.55</version>
 	<multiplayer supported="true" />
 	<iconFilename>icon_AutoDrive.dds</iconFilename>
 	<extraSourceFiles>
