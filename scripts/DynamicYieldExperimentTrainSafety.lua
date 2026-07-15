@@ -1,6 +1,6 @@
 -- Keep the opposing vehicle stopped until the complete yielding train has moved
--- into the right-side corridor. Long trailer combinations need a much longer
--- parallel section than the tractor-only prototype used.
+-- into the right-side corridor. Geometry is derived from lateral offset, turning
+-- radius and full train length instead of large fixed safety distances.
 
 if ADDynamicYield == nil then
     Logging.error("[AD-DY] Train-safety patch could not load")
@@ -8,17 +8,22 @@ if ADDynamicYield == nil then
 end
 
 ADDynamicYield.BUILD = "dynamic-yield-exp0.4"
-ADDynamicYield.TRAIN_PLATEAU_MARGIN = 12
-ADDynamicYield.TRAIN_HOLD_MARGIN = 4
-ADDynamicYield.MIN_TRAIN_PLATEAU = 22
-ADDynamicYield.TRAIN_RETURN_MARGIN = 7
+ADDynamicYield.TRAIN_PLATEAU_MARGIN = 6
+ADDynamicYield.TRAIN_HOLD_MARGIN = 2
+ADDynamicYield.MIN_TRAIN_PLATEAU = 14
+ADDynamicYield.TRAIN_RETURN_MARGIN = 4
+ADDynamicYield.MIN_RAMP = 10
+ADDynamicYield.MAX_RAMP = 24
+ADDynamicYield.ENTRY_BUFFER = 5
+ADDynamicYield.REJOIN_MARGIN = 5
+ADDynamicYield.SAMPLE_STEP = 3
 
 local function dytClamp(value, minimum, maximum)
     return math.max(minimum, math.min(maximum, value))
 end
 
-local function dytDistance(x1, z1, x2, z2)
-    return MathUtil.vector2Length(x2 - x1, z2 - z1)
+local function dytDistance(x1, z1, x2, y2)
+    return MathUtil.vector2Length(x2 - x1, y2 - z1)
 end
 
 local function dytSmoothStep(value)
@@ -40,10 +45,9 @@ local function dytLabel(vehicle)
     return string.format("%s#%s", tostring(name or "vehicle"), tostring(vehicle.id or -1))
 end
 
--- Replaces the exp0.3 candidate geometry. The tractor reaches full lateral
--- offset after the first ramp, then travels at least one complete train length
--- before it is allowed to stop. This lets the last trailer follow off the main
--- route before the opposing vehicle is released.
+-- For a smoothstep lateral profile, endpoint curvature is approximately
+-- 6 * offset / ramp^2. Therefore ramp >= sqrt(6 * offset * turnRadius).
+-- A small 15% margin keeps articulated trains from snapping into the offset.
 function ADDynamicYield:buildApproachCandidate(vehicle, otherVehicle, entryDistance, sharedLength)
     local wayPoints, currentIndex = self:getRoute(vehicle)
     if wayPoints == nil then
@@ -62,8 +66,9 @@ function ADDynamicYield:buildApproachCandidate(vehicle, otherVehicle, entryDista
         self.MIN_OFFSET,
         self.MAX_OFFSET
     )
+    local curvatureRamp = math.sqrt(math.max(0, 6 * offset * math.max(turnRadius, 1))) * 1.15
     local ramp = dytClamp(
-        math.max(self.MIN_RAMP, turnRadius * 2.2, trainLength * 0.65),
+        math.max(self.MIN_RAMP, curvatureRamp),
         self.MIN_RAMP,
         self.MAX_RAMP
     )
@@ -202,6 +207,7 @@ function ADDynamicYield:buildApproachCandidate(vehicle, otherVehicle, entryDista
         plateau = plateau,
         holdDistance = holdDistance,
         totalLength = totalLength,
+        requiredSharedLength = requiredSharedLength,
         grade = grade,
         score = score
     }, nil
@@ -237,13 +243,15 @@ function ADDynamicYield:createPair(firstVehicle, secondVehicle, overlap)
         local candidate = pair ~= nil and pair.candidate or nil
         if pair ~= nil and candidate ~= nil then
             self:log(
-                "Pair %d train-safe geometry: train=%.1fm ramp=%.1fm plateau=%.1fm hold=%.1fm total=%.1fm",
+                "Pair %d compact geometry: train=%.1fm offset=%.1fm ramp=%.1fm plateau=%.1fm hold=%.1fm total=%.1fm required=%.1fm",
                 pair.id,
                 candidate.trainLength or candidate.length or 0,
+                candidate.offset or 0,
                 candidate.ramp or 0,
                 candidate.plateau or 0,
                 candidate.holdDistance or 0,
-                candidate.totalLength or 0
+                candidate.totalLength or 0,
+                candidate.requiredSharedLength or 0
             )
         end
     end
@@ -256,7 +264,9 @@ function ADDynamicYield:loadMap(name)
     self.enabled = true
     self.debugEnabled = true
     self:log(
-        "%s train safety active; through vehicle held until full train reaches side corridor",
-        self.BUILD
+        "%s compact train geometry active; ramps derived from offset/radius, buffers=%dm+%dm",
+        self.BUILD,
+        self.ENTRY_BUFFER,
+        self.REJOIN_MARGIN
     )
 end
