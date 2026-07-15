@@ -100,3 +100,4 @@ source(Utils.getFilename("scripts/DynamicYieldExperimentTrigger.lua", g_currentM
 ADDynamicYield.MANEUVER_TRIGGER_WORLD_DISTANCE = 0
 
 source(Utils.getFilename("scripts/DynamicYieldExperimentSideConvention.lua", g_currentModDirectory))
+source(Utils.getFilename("scripts/DynamicYieldDualPass.lua", g_currentModDirectory))
