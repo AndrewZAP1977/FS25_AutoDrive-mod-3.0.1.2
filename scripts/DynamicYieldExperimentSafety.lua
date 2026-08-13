@@ -105,3 +105,7 @@ source(Utils.getFilename("scripts/DynamicYieldDualPassTiming.lua", g_currentModD
 source(Utils.getFilename("scripts/DynamicYieldDualPassRefinement.lua", g_currentModDirectory))
 source(Utils.getFilename("scripts/DynamicYieldDualPassTuning.lua", g_currentModDirectory))
 source(Utils.getFilename("scripts/DynamicYieldDualPassExit.lua", g_currentModDirectory))
+
+source(Utils.getFilename("scripts/FieldEdgeDiagnosticsCore.lua", g_currentModDirectory))
+source(Utils.getFilename("scripts/FieldEdgeDiagnosticsHooks.lua", g_currentModDirectory))
+source(Utils.getFilename("scripts/FieldEdgeDiagnosticsSampling.lua", g_currentModDirectory))
