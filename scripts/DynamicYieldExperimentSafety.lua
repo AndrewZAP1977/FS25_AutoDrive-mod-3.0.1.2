@@ -109,3 +109,4 @@ source(Utils.getFilename("scripts/DynamicYieldDualPassExit.lua", g_currentModDir
 source(Utils.getFilename("scripts/FieldEdgeDiagnosticsCore.lua", g_currentModDirectory))
 source(Utils.getFilename("scripts/FieldEdgeDiagnosticsHooks.lua", g_currentModDirectory))
 source(Utils.getFilename("scripts/FieldEdgeDiagnosticsSampling.lua", g_currentModDirectory))
+source(Utils.getFilename("scripts/FieldEdgeBehaviorExperiment.lua", g_currentModDirectory))
